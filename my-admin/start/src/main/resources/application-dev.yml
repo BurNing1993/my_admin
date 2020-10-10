@@ -4,3 +4,7 @@ spring:
     url: jdbc:mysql://localhost:3306/my_admin?serverTimezone=UTC
     username: root
     password: root
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
