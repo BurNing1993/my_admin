@@ -18,4 +18,18 @@ public interface UserService {
      * @return
      */
     Page<UserDO> getUserPage(UserDO userDO, Pageable pageable);
+
+    /**
+     * saveUser
+     * @param userDO
+     * @return
+     */
+    UserDO saveUser(UserDO userDO);
+
+    /**
+     * getUser
+     * @param userId
+     * @return
+     */
+    UserDO getUser(Long userId);
 }

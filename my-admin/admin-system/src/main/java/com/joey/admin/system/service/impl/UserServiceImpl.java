@@ -13,6 +13,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.Optional;
 
 /**
  * @author Joey
@@ -30,9 +31,21 @@ public class UserServiceImpl implements UserService {
         Specification<UserDO> userDOSpecification =new Specification<UserDO>() {
             @Override
             public Predicate toPredicate(Root<UserDO> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                return null;
+                Predicate p1 = criteriaBuilder.like(root.get("nickname"),"%"+userDO.getNickname()+"%");
+                return p1;
             }
         };
         return userRepository.findAll(userDOSpecification,pageable);
+    }
+
+    @Override
+    public UserDO saveUser(UserDO userDO) {
+        return userRepository.save(userDO);
+    }
+
+    @Override
+    public UserDO getUser(Long userId) {
+        Optional<UserDO> optionalUserDO= userRepository.findById(userId);
+        return optionalUserDO.isPresent() ? optionalUserDO.get() : null;
     }
 }
