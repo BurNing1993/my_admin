@@ -14,12 +14,12 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <spring-boot.version>2.3.0.RELEASE</spring-boot.version>
+        <jjwt.version>0.11.2</jjwt.version>
     </properties>
 
     <modules>
         <module>admin-common</module>
         <module>admin-system</module>
-        <module>start</module>
     </modules>
 
     <dependencyManagement>
@@ -33,6 +33,24 @@
                 <groupId>com.joey</groupId>
                 <artifactId>admin-system</artifactId>
                 <version>${project.version}</version>
+            </dependency>
+            <!--JJWT-->
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-api</artifactId>
+                <version>${jjwt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-impl</artifactId>
+                <version>${jjwt.version}</version>
+                <scope>runtime</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-jackson</artifactId>
+                <version>${jjwt.version}</version>
+                <scope>runtime</scope>
             </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
