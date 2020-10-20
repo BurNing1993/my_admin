@@ -1,13 +1,6 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
-import Home from '../views/Home.vue';
-
-const routes: Array<RouteRecordRaw> = [
-  {
-    path: '/',
-    name: 'Home',
-    component: Home,
-  },
-];
+import { createRouter, createWebHistory } from 'vue-router';
+import routes from './routes';
+import { getToken } from '@/utils/auth';
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
@@ -15,3 +8,19 @@ const router = createRouter({
 });
 
 export default router;
+
+const allowList = ['/login'];
+
+router.beforeEach(async (to, from) => {
+  // 不需要token
+  if (allowList.includes(to.path)) {
+    return true;
+  } else {
+    const token = getToken();
+    if (token) {
+      // TODO getUserInfo
+    } else {
+      return false;
+    }
+  }
+});

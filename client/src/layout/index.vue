@@ -1,8 +1,6 @@
 <template>
-  <div class="home">
-    <a-button type="primary">
-    Primary
-  </a-button>
+  <div>
+    Layout
   </div>
 </template>
 
@@ -10,8 +8,12 @@
 import { defineComponent } from 'vue';
 
 export default defineComponent({
-  name: 'Home',
-  components: {
+  name: 'Layout',
+  data() {
+    return {};
   },
 });
 </script>
+
+<style lang="scss" scoped>
+</style>

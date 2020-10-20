@@ -1,4 +1,13 @@
 // vue.config.js
 module.exports = {
-  // 选项...
+  devServer: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8888/',
+        pathRewrite: {
+          '^/api': '',
+        },
+      },
+    },
+  },
 };

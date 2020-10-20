@@ -1,29 +1,7 @@
 # admin
 
-## Project setup
-```
-yarn install
-```
+## [Vue3 docs](https://v3.cn.vuejs.org/)
 
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
+## [vue-router](https://next.router.vuejs.org/)
 
-### Compiles and minifies for production
-```
-yarn build
-```
-
-### Run your unit tests
-```
-yarn test:unit
-```
-
-### Lints and fixes files
-```
-yarn lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## [vuex](https://github.com/vuejs/vuex/tree/4.0)
