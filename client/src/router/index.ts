@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import routes from './routes';
 import { getToken } from '@/utils/auth';
+import store from '@/store';
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
@@ -18,8 +19,22 @@ router.beforeEach(async (to, from) => {
   } else {
     const token = getToken();
     if (token) {
-      // TODO getUserInfo
+      const roles = store.getters.roles;
+      console.log(roles);
+      if (roles.length > 0) {
+        return true;
+      } else {
+        try {
+          // TODO getUserInfo roles ADMIN
+          await store.dispatch('getUserInfo');
+          return true;
+        } catch (error) {
+          console.error(error);
+          return false;
+        }
+      }
     } else {
+      router.replace('/login');
       return false;
     }
   }

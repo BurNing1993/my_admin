@@ -1,19 +1,24 @@
 <template>
-  <div>
-    Home
-  </div>
+  <ul>
+    <li>name:{{ name }}</li>
+    <li>roles:{{ roles }}</li>
+  </ul>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
+import { useStore } from 'vuex';
 
 export default defineComponent({
   name: 'Home',
-  data() {
-    return {};
+  setup() {
+    const store = useStore();
+    return {
+      name: computed(() => store.state.user.name),
+      roles: computed(() => store.state.user.roles),
+    };
   },
 });
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

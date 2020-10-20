@@ -1,7 +1,6 @@
 import { Module } from 'vuex';
 
-import { PropsPayload } from '../types';
-import { login } from '@/api/login';
+import { login, getUserInfo } from '@/api/login';
 import { getToken, setToken, removeToken } from '@/utils/auth';
 
 const TOKEN_PREFIX = 'Bearer ';
@@ -9,25 +8,38 @@ const TOKEN_PREFIX = 'Bearer ';
 // TODO 优化 type
 
 const user: Module<any, any> = {
-  state: {
+  state: () => ({
     username: '',
     token: getToken(),
     name: '',
     roles: [],
-  },
+  }),
   mutations: {
-    SET_STATE_PROPS(state, payload: PropsPayload<string>) {
-      state[payload.prop] = payload.payload;
-    },
     SET_TOKEN(state, token) {
       state.token = token;
       setToken(token);
+    },
+    SET_USERNAME(state, username) {
+      state.username = username;
+    },
+    SET_ROLES(state, roles) {
+      state.roles = roles;
+    },
+    SET_NAME(state, name) {
+      state.name = name;
     },
   },
   actions: {
     async login({ commit }, loginRequest) {
       const { data: token } = await login(loginRequest);
       commit('SET_TOKEN', `${TOKEN_PREFIX}${token}`);
+    },
+    async getUserInfo({ commit }) {
+      const { data: { username, roles, nickname } } = await getUserInfo();
+      commit('SET_USERNAME', username);
+      commit('SET_ROLES', roles);
+      commit('SET_NAME', nickname);
+      return roles;
     },
   },
 };

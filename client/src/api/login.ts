@@ -13,3 +13,18 @@ export function login(data: LoginRequest): AxiosPromise<string> {
     data,
   });
 }
+
+export interface UserInfo {
+  username: string;
+  nickname: string;
+  email: string;
+  roles: string[];
+  enabled: boolean;
+}
+
+export function getUserInfo(): AxiosPromise<UserInfo> {
+  return request({
+    url: '/api/userinfo',
+    method: 'GET',
+  });
+}
