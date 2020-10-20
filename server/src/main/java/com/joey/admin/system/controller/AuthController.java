@@ -69,7 +69,7 @@ public class AuthController {
         userDO.setUsername(signupRequest.getUsername());
         userDO.setNickname(signupRequest.getUsername());
         userDO.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
-        userDO.setHasDeleted(0);
+        userDO.setHasDeleted(false);
         userDO.setEnabled(true);
         Set<RoleDO> roles = new HashSet<>();
         RoleDO role = roleService.findByRoleName(RoleNameEnum.USER);

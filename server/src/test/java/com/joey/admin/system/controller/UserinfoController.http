@@ -1,0 +1,6 @@
+###
+GET http://localhost:8888/userinfo
+Accept: application/json
+Authorization:Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1IiwiaWF0IjoxNjAzMTcyNDQ4LCJleHAiOjE2MDMxOTQwNDh9.fSEAzv6lsiETvtdSjRoDsf_KWCs7WrS55Tup-PPP8hg
+
+

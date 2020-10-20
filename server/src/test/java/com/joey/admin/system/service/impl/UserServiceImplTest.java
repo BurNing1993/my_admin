@@ -44,7 +44,7 @@ class UserServiceImplTest {
         user.setUsername("joey123");
         user.setPassword("21asee23eqwrqewqerq23");
         user.setEnabled(true);
-        user.setHasDeleted(0);
+        user.setHasDeleted(false);
         List<RoleDO> list = roleService.findAllByIdIn(Arrays.asList(1l,2l));
         user.setRoles(new HashSet<RoleDO>(list));
         UserDO userDO = userService.saveUser(user);

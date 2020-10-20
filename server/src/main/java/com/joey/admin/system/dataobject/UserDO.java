@@ -48,6 +48,6 @@ public class UserDO extends UserDateAudit {
     )
     private Set<RoleDO> roles;
 
-    @Column(length = 1, columnDefinition = "tinyint(1) default 0")
-    private Integer hasDeleted;
+    @Column(columnDefinition = "bool default false")
+    private Boolean hasDeleted;
 }

@@ -59,7 +59,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/auth/**", "/public/**").permitAll()
                 //  指定路径下的资源需要验证了的用户才能访问
-                .antMatchers(HttpMethod.GET, "/api/polls/**", "/api/users/**").permitAll()
+                .antMatchers(HttpMethod.GET,  "/api/users/**").permitAll()
                 .antMatchers(HttpMethod.DELETE).hasRole("ADMIN")
                 // 其他都验证
                 .anyRequest().authenticated()
