@@ -4,6 +4,10 @@ spring:
     url: jdbc:mysql://localhost:3306/my_admin?serverTimezone=UTC
     username: root
     password: root
-
-jwt:
-  expirationInMs: 604800000
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true

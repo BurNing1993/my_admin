@@ -61,8 +61,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //  指定路径下的资源需要验证了的用户才能访问
                 .antMatchers(HttpMethod.GET,  "/api/users/**").permitAll()
                 .antMatchers(HttpMethod.DELETE).hasRole("ADMIN")
-                // 其他都验证
-                .anyRequest().authenticated()
+                // 其他都验证 TODO
+                // 其他都验证 TODO
+                .anyRequest().permitAll()
                 .and()
                 // token filter
                 .addFilterBefore(new JwtAuthorizationTokenFilter(), UsernamePasswordAuthenticationFilter.class);

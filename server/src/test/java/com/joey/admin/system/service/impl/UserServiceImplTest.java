@@ -31,9 +31,10 @@ class UserServiceImplTest {
 
     @Test
     void getUserPage() {
-        Pageable pageable = PageRequest.of(1, 10, Sort.Direction.DESC, "id");
+        Pageable pageable = PageRequest.of(0, 10, Sort.Direction.DESC, "id");
         Page<UserDO> userPage = userService.getUserPage(null, pageable);
-        Assertions.assertTrue(userPage.getNumber() > 0);
+        System.out.println(userPage.getContent().size());
+        Assertions.assertTrue(userPage.getTotalElements() > 0);
     }
 
     @Test
