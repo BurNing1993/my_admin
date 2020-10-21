@@ -8,7 +8,7 @@ export interface LoginRequest {
 
 export function login(data: LoginRequest): AxiosPromise<string> {
   return request({
-    url: '/api/auth/login',
+    url: '/auth/login',
     method: 'POST',
     data,
   });
@@ -24,7 +24,7 @@ export interface UserInfo {
 
 export function getUserInfo(): AxiosPromise<UserInfo> {
   return request({
-    url: '/api/userinfo',
+    url: '/userinfo',
     method: 'GET',
   });
 }

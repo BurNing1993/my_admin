@@ -1,10 +1,23 @@
 import { RouteRecordRaw } from 'vue-router';
+import Layout from '../layout/index.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    name: 'Home',
-    component: () => import('../views/home/index.vue'),
+    name: 'Layout',
+    component: Layout,
+    children: [
+      {
+        path: '',
+        name: 'Home',
+        component: () => import('@/views/home/index.vue'),
+      },
+      {
+        path: 'user',
+        name: 'User',
+        component: () => import('@/views/user/index.vue'),
+      },
+    ],
   },
   {
     path: '/login',

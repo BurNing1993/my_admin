@@ -29,6 +29,7 @@ router.beforeEach(async (to, from) => {
           await store.dispatch('getUserInfo');
           return true;
         } catch (error) {
+          router.replace('/login');
           console.error(error);
           return false;
         }

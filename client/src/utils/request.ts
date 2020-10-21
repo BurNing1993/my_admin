@@ -4,7 +4,7 @@ import { getToken } from '@/utils/auth';
 axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8';
 
 const axiosInstance = axios.create({
-  baseURL: '/',
+  baseURL: '/api',
   // timeout: 10000,
 });
 
