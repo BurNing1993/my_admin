@@ -3,7 +3,6 @@ import { Module } from 'vuex';
 import { login, getUserInfo } from '@/api/login';
 import { getToken, setToken, removeToken } from '@/utils/auth';
 
-const TOKEN_PREFIX = 'Bearer ';
 
 // TODO 优化 type
 
@@ -32,7 +31,7 @@ const user: Module<any, any> = {
   actions: {
     async login({ commit }, loginRequest) {
       const { data: token } = await login(loginRequest);
-      commit('SET_TOKEN', `${TOKEN_PREFIX}${token}`);
+      commit('SET_TOKEN', token);
     },
     async getUserInfo({ commit }) {
       const { data: { username, roles, nickname } } = await getUserInfo();

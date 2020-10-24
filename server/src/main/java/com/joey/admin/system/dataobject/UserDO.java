@@ -1,5 +1,6 @@
 package com.joey.admin.system.dataobject;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.joey.admin.common.audit.UserDateAudit;
 import lombok.Data;
 
@@ -25,6 +26,7 @@ public class UserDO extends UserDateAudit {
     @Column(nullable = false, unique = true, length = 64)
     private String username;
 
+    @JsonIgnore
     @Column(nullable = false)
     private String password;
 
