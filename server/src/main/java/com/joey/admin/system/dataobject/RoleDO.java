@@ -16,20 +16,23 @@ import java.util.Set;
  **/
 @Data
 @Entity
-@Table(name = "role")
+@Table(name = "sys_role")
 public class RoleDO extends UserDateAudit {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(columnDefinition = "bigint(20) unsigned")
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(columnDefinition = "bigint(20) unsigned")
+  private Long id;
 
-    /**
-     * 自然键（natural key）是单个或组合属性，他们必须唯一且非空。
-     */
-    @Enumerated(EnumType.STRING)
-    @Column(length = 64)
-    private RoleNameEnum roleName;
+  /**
+   * 自然键（natural key）是单个或组合属性，他们必须唯一且非空。
+   */
+  @Enumerated(EnumType.STRING)
+  @Column(length = 64)
+  private RoleNameEnum roleName;
 
-    @Column(columnDefinition = "bool default false")
-    private Boolean hasDeleted;
+  @Column(length = 64)
+  private String roleDesc;
+
+  @Column(columnDefinition = "bool default false")
+  private Boolean hasDeleted;
 }

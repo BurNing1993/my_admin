@@ -24,3 +24,8 @@ export interface Result<T> {
   total: number;
   list: T[];
 }
+
+// Props
+export interface Props {
+  [key: string]: any;
+}

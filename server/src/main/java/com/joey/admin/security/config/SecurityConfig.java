@@ -62,8 +62,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET,  "/api/users/**").permitAll()
                 .antMatchers(HttpMethod.DELETE).hasRole("ADMIN")
                 // 其他都验证 TODO
-                // 其他都验证 TODO
-                .anyRequest().permitAll()
+                .anyRequest().authenticated()
                 .and()
                 // token filter
                 .addFilterBefore(new JwtAuthorizationTokenFilter(), UsernamePasswordAuthenticationFilter.class);

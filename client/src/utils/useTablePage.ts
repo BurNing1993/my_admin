@@ -1,9 +1,10 @@
-import { onMounted, reactive, ref, toRefs } from 'vue';
+import { onMounted, reactive, ref, toRaw, toRef } from 'vue';
+import { useForm } from '@ant-design-vue/use';
 
-import { BasePageParams, Result } from './types';
+import { BasePageParams, Result, Props } from './types';
 
 // TODO 泛型
-export default function usePage(getData: (pageParams: BasePageParams) => Promise<Result<any>>) {
+export default function usePage(getData: (pageParams: BasePageParams) => Promise<Result<any>>, modelRef: Props) {
   const loading = ref(false);
 
   const pageParams: BasePageParams = reactive({
@@ -16,10 +17,13 @@ export default function usePage(getData: (pageParams: BasePageParams) => Promise
     total: 0,
   });
 
+  // TODO rulesRef 为null报错
+  const { resetFields } = useForm(modelRef, {});
+
   const getList = async () => {
     try {
       loading.value = true;
-      const { list, total } = await getData(pageParams);
+      const { list, total } = await getData({ ...toRaw(modelRef), ...toRaw(pageParams) });
       result.list = list;
       result.total = total;
     } catch (error) {
@@ -29,10 +33,17 @@ export default function usePage(getData: (pageParams: BasePageParams) => Promise
     }
   };
   // 先执行一次
-  onMounted(getList);
+  onMounted(() => {
+    getList();
+  });
 
-  const onShowSizeChange = (current: number, pageSize: number) => {
+  const onShowSizeChange = (_current: number, pageSize: number) => {
     pageParams.size = pageSize;
+    getList();
+  };
+
+  const onChange = (page: number, _pageSize: number) => {
+    pageParams.page = page;
     getList();
   };
 
@@ -41,21 +52,25 @@ export default function usePage(getData: (pageParams: BasePageParams) => Promise
     getList();
   };
 
+  const onReset = () => {
+    resetFields();
+    onSearch();
+  };
+
   return {
-    ...toRefs({
-      list: result.list,
-      loading,
-      onSearch,
+    list: toRef(result, 'list'),
+    loading,
+    onSearch,
+    onReset,
+    paginationProps: {
+      current: pageParams.page,
+      total: result.total,
+      defaultPageSize: 10,
+      showTotal: (total: number) => `共 ${total} 条数据`,
+      pageSizeOptions: ['5', '10', '15', '20'],
+      showSizeChanger: true,
       onShowSizeChange,
-      paginationProps: {
-        current: pageParams.page,
-        total: result.total,
-        defaultPageSize: 10,
-        showTotal: (total: number) => `共 ${total} 条数据`,
-        pageSizeOptions: ['5', '10', '15', '20'],
-        showSizeChanger: true,
-        onShowSizeChange,
-      },
-    }),
+      onChange,
+    },
   };
 }

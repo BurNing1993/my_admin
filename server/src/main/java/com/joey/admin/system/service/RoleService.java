@@ -4,7 +4,6 @@ import com.joey.admin.system.dataobject.RoleDO;
 import com.joey.admin.system.enums.RoleNameEnum;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @author Joey
@@ -25,4 +24,10 @@ public interface RoleService {
      * @return
      */
     List<RoleDO> findAllByIdIn(List<Long> roleIds);
+
+    /**
+     *  角色列表
+     * @return
+     */
+    List<RoleDO> getRoleList();
 }

@@ -16,7 +16,7 @@ public enum RoleNameEnum {
     /**
      * 管理员
      */
-    ADMIN("ADMIN", "Admin"),
+    ADMIN("ADMIN", "管理员"),
     ;
 
     private String name;

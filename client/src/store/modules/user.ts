@@ -3,7 +3,6 @@ import { Module } from 'vuex';
 import { login, getUserInfo } from '@/api/login';
 import { getToken, setToken, removeToken } from '@/utils/auth';
 
-
 // TODO 优化 type
 
 const user: Module<any, any> = {

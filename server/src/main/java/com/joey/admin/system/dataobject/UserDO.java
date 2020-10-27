@@ -5,7 +5,6 @@ import com.joey.admin.common.audit.UserDateAudit;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -15,7 +14,7 @@ import java.util.Set;
  **/
 @Data
 @Entity
-@Table(name = "user")
+@Table(name = "sys_user")
 public class UserDO extends UserDateAudit {
 
     @Id
@@ -44,7 +43,7 @@ public class UserDO extends UserDateAudit {
 
     @ManyToMany(targetEntity = RoleDO.class, cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JoinTable(
-            name = "user_role",
+            name = "sys_user_role",
             joinColumns = {@JoinColumn(name = "user_id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id")}
     )
