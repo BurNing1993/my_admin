@@ -87,13 +87,27 @@ public class JwtTokenUtil {
       throw new JwtException("Invalid Token!");
     }
   }
-
   /**
-   * 验证Token
+   *  token是否存在
    *
    * @param request
-   * @return
+   * @return token
    */
+  public static boolean hasToken(HttpServletRequest request) {
+    String token = request.getHeader(HEADER_KEY);
+    if (StringUtils.hasText(token) && StringUtils.containsWhitespace(TOKEN_PREFIX)) {
+      return true;
+    }
+    return false;
+  }
+
+
+    /**
+     * 验证Token
+     *
+     * @param request
+     * @return
+     */
   public static boolean validateToken(HttpServletRequest request) {
     try {
       String token = getToken(request);
