@@ -1,5 +1,5 @@
 import { NowRequest, NowResponse } from '@vercel/node'
-import Mock, { Random } from "mockjs";
+import { Random } from "mockjs";
 
 import { PageResponse } from "../type";
 import { Role } from '../roles'
@@ -31,7 +31,7 @@ export default (request: NowRequest, response: NowResponse) => {
   for (let i = 0; i < size; i++) {
     userList.push(new User());
   }
-  const total = Random.integer(10)
+  const total = Random.integer(10, 100)
   const pages = Math.ceil(total / size);
   const pageData: PageResponse<User> = {
     content: userList,
