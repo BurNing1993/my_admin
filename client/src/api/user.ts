@@ -6,10 +6,10 @@ export interface UserPageParams {
   [key: string]: any;
 }
 export interface User {
-  id: string;
+  id: number;
   username: string;
   nickname: string;
-  enabled: string;
+  enabled: boolean;
   cellphone: string;
   email: string;
   roles: any[]; // TODO role
