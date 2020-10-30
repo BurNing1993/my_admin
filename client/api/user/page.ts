@@ -2,6 +2,7 @@ import { NowRequest, NowResponse } from '@vercel/node'
 import Mock, { Random } from "mockjs";
 
 import { PageResponse } from "../type";
+import { Role } from '../roles'
 
 export class User {
   id: number;
@@ -12,18 +13,14 @@ export class User {
   email: string;
   roles: any[]; // TODO role
   constructor() {
+    const role = new Role();
     this.id = Random.natural();
     this.username = Random.first();
     this.nickname = Random.cfirst();
     this.enabled = Random.boolean();
     this.cellphone = Random.integer(13000000000, 19999999999);
     this.email = Random.email();
-    this.roles = Mock.mock({
-      "array|1": [
-        "ADMIN",
-        "USER",
-      ]
-    });
+    this.roles = [role];
   }
 }
 
