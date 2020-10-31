@@ -16,9 +16,7 @@ import org.springframework.data.domain.Sort;
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.Set;
 
 @SpringBootTest
 class UserServiceImplTest {
@@ -46,7 +44,7 @@ class UserServiceImplTest {
         user.setPassword("21asee23eqwrqewqerq23");
         user.setEnabled(true);
         user.setHasDeleted(false);
-        List<RoleDO> list = roleService.findAllByIdIn(Arrays.asList(1l,2l));
+        Set<RoleDO> list = roleService.findAllByIdIn(Arrays.asList(1l,2l));
         user.setRoles(new HashSet<RoleDO>(list));
         UserDO userDO = userService.saveUser(user);
         System.out.println(userDO);

@@ -1,7 +1,7 @@
 import { onMounted, reactive, ref, toRaw, toRef } from 'vue';
 import { useForm } from '@ant-design-vue/use';
 
-import { BasePageParams, Result, Props } from './types';
+import { BasePageParams, Result, Props } from '../utils/types';
 
 // TODO 泛型
 export default function usePage(getData: (pageParams: BasePageParams) => Promise<Result<any>>, modelRef: Props) {
@@ -64,7 +64,7 @@ export default function usePage(getData: (pageParams: BasePageParams) => Promise
     onReset,
     paginationProps: {
       current: pageParams.page,
-      total: result.total,
+      total: toRef(result, 'total'),
       defaultPageSize: 10,
       showTotal: (total: number) => `共 ${total} 条数据`,
       pageSizeOptions: ['5', '10', '15', '20'],

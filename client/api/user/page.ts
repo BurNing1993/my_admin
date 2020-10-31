@@ -31,12 +31,12 @@ export default (request: NowRequest, response: NowResponse) => {
   for (let i = 0; i < size; i++) {
     userList.push(new User());
   }
-  const total = Random.integer(10, 100)
-  const pages = Math.ceil(total / size);
+  // const total = Random.integer(10, 100)
+  // const pages = Math.ceil(total / size);
   const pageData: PageResponse<User> = {
     content: userList,
-    totalElements: total,
-    totalPages: pages,
+    totalElements: 85,
+    totalPages: 9,
   }
   response.status(200).json(pageData);
 }

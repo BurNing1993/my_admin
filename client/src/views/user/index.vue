@@ -14,6 +14,9 @@
         </a-form-item>
       </a-form>
     </div>
+    <div class="toolbar">
+      <a-button type="primary" @click="onAddClick"> ADD </a-button>
+    </div>
     <!-- table -->
     <a-table
       :columns="columns"
@@ -34,18 +37,24 @@
         </span>
       </template>
     </a-table>
+
+    <UserModal v-model:visible="visible"  :title="title" :op="op"/>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from 'vue';
+import { defineComponent, reactive, toRefs } from 'vue';
 import { getUserPage, User } from '@/api/user';
-import useTablePage from '@/utils/useTablePage';
+import useTablePage from '@/composables/useTablePage';
 import { ColumnProps } from 'ant-design-vue/types/table/column';
 import { BasePageParams, Props } from '@/utils/types';
+import UserModal from './UserModal.vue';
 
 export default defineComponent({
   name: 'User',
+  components: {
+    UserModal,
+  },
   setup() {
     const columns: ColumnProps<User>[] = [
       {
@@ -84,9 +93,23 @@ export default defineComponent({
         total: totalElements,
       };
     };
-    const { list, loading, paginationProps, onSearch, onReset } = useTablePage(getPage, searchModelRef);
+    const { list, loading, paginationProps, onSearch, onReset } = useTablePage(
+      getPage,
+      searchModelRef,
+    );
 
+    const state = reactive({
+      visible: false,
+      title: 'User',
+      op: 'add',
+    });
+
+    const onAddClick = () => {
+      state.visible = true;
+    };
     return {
+      ...toRefs(state),
+      onAddClick,
       list,
       columns,
       loading,

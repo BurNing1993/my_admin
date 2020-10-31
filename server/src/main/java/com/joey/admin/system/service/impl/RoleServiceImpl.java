@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Joey
@@ -26,7 +27,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public List<RoleDO> findAllByIdIn(List<Long> roleIds) {
+    public Set<RoleDO> findAllByIdIn(List<Long> roleIds) {
         return roleRepository.findAllByIdIn(roleIds);
     }
 

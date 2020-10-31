@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * @author Joey
@@ -26,5 +27,5 @@ public interface RoleRepository extends JpaRepository<RoleDO,Long> {
      * @param roleIds
      * @return
      */
-    List<RoleDO> findAllByIdIn(List<Long> roleIds);
+    Set<RoleDO> findAllByIdIn(List<Long> roleIds);
 }

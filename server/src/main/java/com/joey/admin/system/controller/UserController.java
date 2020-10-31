@@ -1,7 +1,10 @@
 package com.joey.admin.system.controller;
 
+import com.joey.admin.system.dataobject.RoleDO;
 import com.joey.admin.system.dataobject.UserDO;
+import com.joey.admin.system.request.AddUserRequest;
 import com.joey.admin.system.request.UserPageRequest;
+import com.joey.admin.system.service.RoleService;
 import com.joey.admin.system.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -11,8 +14,16 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author Joey
@@ -23,8 +34,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class UserController {
 
+  private static final String DEFAULT_PASSWORD = "123456";
+
   @Autowired
   private UserService userService;
+
+  @Autowired
+  private RoleService roleService;
+
+  @Autowired
+  private PasswordEncoder passwordEncoder;
 
   @GetMapping("/user/page")
   public ResponseEntity<?> getUserPage(UserPageRequest userPageRequest){
@@ -35,4 +54,25 @@ public class UserController {
     log.info("UserPageRequest:",userPageRequest.toString());
     return  ResponseEntity.ok(userPage);
   }
+
+  @PostMapping("/user")
+  public ResponseEntity<?> addUser(@Valid @RequestBody AddUserRequest addUserRequest){
+    UserDO userDO = new UserDO();
+    BeanUtils.copyProperties(addUserRequest,userDO);
+    userDO.setEnabled(true);
+    userDO.setHasDeleted(false);
+    String nickname = addUserRequest.getNickname();
+    if (StringUtils.isEmpty(nickname)){
+      nickname= addUserRequest.getUsername();
+    }
+    userDO.setNickname(nickname);
+    userDO.setPassword(passwordEncoder.encode(DEFAULT_PASSWORD));
+    List<Long> roleIds = addUserRequest.getRoleIds();
+    if (roleIds!=null&&roleIds.size()>0){
+      Set<RoleDO> roles = roleService.findAllByIdIn(roleIds);
+      userDO.setRoles(roles);
+    }
+    UserDO user = userService.saveUser(userDO);
+    return ResponseEntity.ok(user.getId());
+  };
 }

@@ -2,7 +2,14 @@
 GET http://localhost:8888/user/page?page=1&size=10
 Authorization:Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1IiwiaWF0IjoxNjAzMTg1MTgxLCJleHAiOjE2MDMyMDY3ODF9.6MYCj9QHDlwjoXBEhq8nDPpsnucv061QxRYIwCkSti4
 
+###
+POST http://localhost:8888/user
+Authorization:Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjA0MDM4MjM0LCJleHAiOjE2MDQwNTk4MzR9.CNA5ur_5j9Sc2skfgd8KiIRZSDLCPd88HhT2zuDGhS0
+Content-Type: application/json
 
-
-
+{
+  "username": "name-test",
+  "nickname": "nickname",
+  "roleIds": [2]
+}
 
