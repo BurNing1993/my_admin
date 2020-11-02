@@ -1,5 +1,6 @@
 package com.joey.admin.system.service.impl;
 
+import com.joey.admin.common.exception.LoginFailException;
 import com.joey.admin.security.entity.JwtUser;
 import com.joey.admin.security.service.impl.UserDetailsServiceImpl;
 import com.joey.admin.security.utils.JwtTokenUtil;
@@ -25,24 +26,30 @@ public class LoginServiceImpl implements LoginService {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    @Autowired
-    private UserDetailsServiceImpl userDetailsService;
-
-
     @Override
     public String login(LoginRequest loginRequest) {
-
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+        try {
+            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                 loginRequest.getUsername(),
                 loginRequest.getPassword()
-        );
-        Authentication authenticate = authenticationManager.authenticate(
+            );
+            Authentication authenticate = authenticationManager.authenticate(
                 usernamePasswordAuthenticationToken
-        );
-        log.info("Authenticate:" + String.valueOf(authenticate));
-        SecurityContextHolder.getContext().setAuthentication(authenticate);
-        JwtUser user = (JwtUser) authenticate.getPrincipal();
-        String token = JwtTokenUtil.generateToken(String.valueOf(user.getId()));
-        return token;
+            );
+            log.info("Authenticate:" + String.valueOf(authenticate));
+            if (authenticate.isAuthenticated()) {
+                SecurityContextHolder.getContext().setAuthentication(authenticate);
+                JwtUser user = (JwtUser) authenticate.getPrincipal();
+                String token = JwtTokenUtil.generateToken(String.valueOf(user.getId()));
+                return token;
+            } else {
+                log.error("Login Fail:" + loginRequest.toString());
+                throw new LoginFailException("账号或密码错误！", loginRequest);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("Login Fail:" + loginRequest.toString());
+            throw new LoginFailException("账号或密码错误！", loginRequest, e);
+        }
     }
 }

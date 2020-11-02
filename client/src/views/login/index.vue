@@ -88,7 +88,7 @@ export default defineComponent({
         message.success('登录成功!');
         router.push('/');
       } catch (error) {
-        console.log('error', error);
+        console.error('login error', error);
       } finally {
         loading.value = false;
       }

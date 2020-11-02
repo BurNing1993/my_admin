@@ -1,6 +1,7 @@
 package com.joey.admin.common.exception.handler;
 
 import com.joey.admin.common.exception.BaseException;
+import com.joey.admin.common.exception.LoginFailException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,5 +44,16 @@ public class GlobalExceptionHandler {
         });
         log.error("occur MethodArgumentNotValidException:" + errors);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+    }
+
+    /**
+     * 登录失败异常处理
+     */
+    @ExceptionHandler(LoginFailException.class)
+    public ResponseEntity handleLoginFailException(LoginFailException e,HttpServletRequest request){
+        Map<String, Object> errors = new HashMap<>(8);
+        String message = e.getMessage();
+        log.error("occur LoginFailException:" + message);
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(message);
     }
 }
