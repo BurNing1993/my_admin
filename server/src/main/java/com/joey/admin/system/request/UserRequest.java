@@ -15,7 +15,7 @@ import java.util.List;
  **/
 
 @Getter
-public class AddUserRequest {
+public class UserRequest {
   @NotBlank(message = "用户名不能为空!")
   @Size(min = 6, max = 16, message = "用户名为6~16位!")
   private String username;

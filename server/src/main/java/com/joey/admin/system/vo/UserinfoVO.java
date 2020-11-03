@@ -17,4 +17,5 @@ public class UserinfoVO {
   private String cellphone;
   private Set<String> roles;
   private Boolean enabled;
+  private Boolean isDefaultPassword;
 }

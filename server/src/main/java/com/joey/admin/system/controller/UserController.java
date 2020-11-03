@@ -1,9 +1,10 @@
 package com.joey.admin.system.controller;
 
+import com.joey.admin.system.constants.UserConstants;
 import com.joey.admin.system.dataobject.RoleDO;
 import com.joey.admin.system.dataobject.UserDO;
-import com.joey.admin.system.request.AddUserRequest;
 import com.joey.admin.system.request.UserPageRequest;
+import com.joey.admin.system.request.UserRequest;
 import com.joey.admin.system.service.RoleService;
 import com.joey.admin.system.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -34,45 +35,43 @@ import java.util.Set;
 @RestController
 public class UserController {
 
-  private static final String DEFAULT_PASSWORD = "123456";
+    @Autowired
+    private UserService userService;
 
-  @Autowired
-  private UserService userService;
+    @Autowired
+    private RoleService roleService;
 
-  @Autowired
-  private RoleService roleService;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-  @Autowired
-  private PasswordEncoder passwordEncoder;
-
-  @GetMapping("/user/page")
-  public ResponseEntity<?> getUserPage(UserPageRequest userPageRequest){
-    UserDO userDO =new UserDO();
-    BeanUtils.copyProperties(userPageRequest,userDO);
-    Pageable page = PageRequest.of(userPageRequest.getPage()-1,userPageRequest.getSize(), Sort.Direction.DESC,"id");
-    Page<UserDO> userPage = userService.getUserPage(userDO, page);
-    log.info("UserPageRequest:",userPageRequest.toString());
-    return  ResponseEntity.ok(userPage);
-  }
-
-  @PostMapping("/user")
-  public ResponseEntity<?> addUser(@Valid @RequestBody AddUserRequest addUserRequest){
-    UserDO userDO = new UserDO();
-    BeanUtils.copyProperties(addUserRequest,userDO);
-    userDO.setEnabled(true);
-    userDO.setHasDeleted(false);
-    String nickname = addUserRequest.getNickname();
-    if (StringUtils.isEmpty(nickname)){
-      nickname= addUserRequest.getUsername();
+    @GetMapping("/user/page")
+    public ResponseEntity<?> getUserPage(UserPageRequest userPageRequest) {
+        UserDO userDO = new UserDO();
+        BeanUtils.copyProperties(userPageRequest, userDO);
+        Pageable page = PageRequest.of(userPageRequest.getPage() - 1, userPageRequest.getSize(), Sort.Direction.DESC, "id");
+        Page<UserDO> userPage = userService.getUserPage(userDO, page);
+        log.info("UserPageRequest:", userPageRequest.toString());
+        return ResponseEntity.ok(userPage);
     }
-    userDO.setNickname(nickname);
-    userDO.setPassword(passwordEncoder.encode(DEFAULT_PASSWORD));
-    List<Long> roleIds = addUserRequest.getRoleIds();
-    if (roleIds!=null&&roleIds.size()>0){
-      Set<RoleDO> roles = roleService.findAllByIdIn(roleIds);
-      userDO.setRoles(roles);
+
+    @PostMapping("/user")
+    public ResponseEntity<?> addUser(@Valid @RequestBody UserRequest userRequest) {
+        UserDO userDO = new UserDO();
+        BeanUtils.copyProperties(userRequest, userDO);
+        userDO.setEnabled(true);
+        userDO.setHasDeleted(false);
+        String nickname = userRequest.getNickname();
+        if (StringUtils.isEmpty(nickname)) {
+            nickname = userRequest.getUsername();
+        }
+        userDO.setNickname(nickname);
+        userDO.setPassword(passwordEncoder.encode(UserConstants.DEFAULT_PASSWORD));
+        List<Long> roleIds = userRequest.getRoleIds();
+        if (roleIds != null && roleIds.size() > 0) {
+            Set<RoleDO> roles = roleService.findAllByIdIn(roleIds);
+            userDO.setRoles(roles);
+        }
+        UserDO user = userService.saveUser(userDO);
+        return ResponseEntity.ok(user.getId());
     }
-    UserDO user = userService.saveUser(userDO);
-    return ResponseEntity.ok(user.getId());
-  };
 }
