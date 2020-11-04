@@ -12,12 +12,12 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref } from 'vue';
 import { getRoleList, Role } from '@/api/role';
-import { ColumnProps } from 'ant-design-vue/types/table/column';
+import { ColumnProps } from 'ant-design-vue/es/table/interface';
 
 export default defineComponent({
   name: 'Role',
   setup() {
-    const columns: ColumnProps<Role>[] = [
+    const columns: ColumnProps[] = [
       {
         title: 'RoleName',
         dataIndex: 'roleName',

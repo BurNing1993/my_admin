@@ -1,46 +1,158 @@
-# Getting Started with Create React App
+# TsApp
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Redux
 
-## Available Scripts
+### install
 
-In the project directory, you can run:
+```sh
+yarn add redux react-redux  @types/react-redux redux-thunk
+```
 
-### `yarn start`
+### counterReducer
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- types
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+```ts
+// /store/counter/types.ts
+export interface CounterState {
+  num: number;
+}
 
-### `yarn test`
+export const INCREMENT = 'increment';
+export const DECREMENT = 'decrement';
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+export interface IncrementAction {
+  type: typeof INCREMENT;
+  num: number
+}
 
-### `yarn build`
+export interface DecrementAction {
+  type: typeof DECREMENT;
+  num: number
+}
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+export type CounterActionTypes = IncrementAction | DecrementAction
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- actions
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```ts
+// /store/counter/actions.ts
+import { INCREMENT, DECREMENT, IncrementAction, DecrementAction } from "./types";
 
-### `yarn eject`
+export function increment(num: number = 1): IncrementAction {
+  return {
+    type: INCREMENT,
+    num,
+  }
+}
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+export function decrement(num: number = 1): DecrementAction {
+  return {
+    type: DECREMENT,
+    num,
+  }
+}
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- reducer
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+```ts
+// /store/counter/index.ts
+import { CounterState, CounterActionTypes, INCREMENT, DECREMENT } from "./types";
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-## Learn More
+const initialState: CounterState = {
+  num: 0,
+}
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+export default function counter(state = initialState, action: CounterActionTypes): CounterState {
+  switch (action.type) {
+    case INCREMENT:
+      return {
+        num: state.num + action.num,
+      }
+    case DECREMENT:
+      return {
+        num: state.num - action.num,
+      }
+    default:
+      return state;
+  }
+}
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### createStore
+
+```ts
+// /store/index.ts
+import { combineReducers, createStore } from "redux";
+
+import counterReducer from './counter'
+
+const rootReducer = combineReducers({
+  counter: counterReducer
+});
+
+const store = createStore(rootReducer);
+
+export default store;
+
+export type RootState = ReturnType<typeof rootReducer>
+```
+
+### Provider
+
+```tsx
+// App.tsx
+import React, { FC } from "react";
+import { Provider } from "react-redux";
+import store from "./store";
+import Counter from "./Counter";
+
+const App: FC = () => (
+  <Provider store={store}>
+    <Counter />
+  </Provider>
+);
+
+export default App;
+```
+
+### CounterComponents
+
+```tsx
+// Counter.tsx
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../store";
+import { increment, decrement } from "../store/counter/actions";
+
+const Counter = () => {
+  const counter = useSelector((state: RootState) => state.counter.num);
+  const dispatch = useDispatch();
+
+  const onIncrement = (num: number) => {
+    dispatch(increment(num));
+  };
+  const onDecrement = () => {
+    dispatch(decrement());
+  };
+  return (
+    <>
+      <p>Counter : {counter}</p>
+      <button onClick={() => onIncrement(2)}>increment</button>
+      <button onClick={onDecrement}>decrement</button>
+    </>
+  );
+};
+export default Counter;
+```
+
+## react-router
+
+- install
+
+```sh
+yarn add react-router-dom @types/react-router-dom
+```

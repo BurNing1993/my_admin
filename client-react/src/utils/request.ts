@@ -1,17 +1,13 @@
 import axios from 'axios';
-import { message } from 'ant-design-vue';
-
-import { getToken } from './auth';
-import router from '@/router';
+import { getToken } from "./auth";
 
 axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8';
+const AUTH_HEADER_KEY = 'Authorization';
 
 const axiosInstance = axios.create({
   baseURL: '/api',
   // timeout: 10000,
 });
-
-const AUTH_HEADER_KEY = 'Authorization';
 
 // request拦截器
 axiosInstance.interceptors.request.use(config => {
@@ -33,17 +29,13 @@ function handleError(status: number, errorMessage: unknown) {
   switch (status) {
     // 401 Unauthorized
     case 401:
-      message.error(errMessage);
-      router.replace('/login');
       break;
     //  Forbidden
     case 403:
       errMessage = '无权限！';
-      message.error(errMessage);
       break;
 
     default:
-      message.error(errMessage);
       break;
   }
 }

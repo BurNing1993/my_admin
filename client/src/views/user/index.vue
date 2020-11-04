@@ -26,7 +26,7 @@
       :pagination="paginationProps"
       bordered
     >
-      <template v-slot:roles="{ text: roles }">
+      <!-- <template v-slot:roles="{ text: roles }">
         <a-tag v-for="role in roles" :key="role.id" color="blue">
           {{ role.roleName }}
         </a-tag>
@@ -35,18 +35,18 @@
         <span>
           <a>Delete {{ record.username }}</a>
         </span>
-      </template>
+      </template> -->
     </a-table>
 
-    <UserModal v-model:visible="visible"  :title="title" :op="op"/>
+    <UserModal ref="userModal" :op="op" />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, reactive, toRefs } from 'vue';
-import { getUserPage, User } from '@/api/user';
+import { getUserPage } from '@/api/user';
 import useTablePage from '@/composables/useTablePage';
-import { ColumnProps } from 'ant-design-vue/types/table/column';
+import { ColumnProps } from 'ant-design-vue/es/table/interface';
 import { BasePageParams, Props } from '@/utils/types';
 import UserModal from './UserModal.vue';
 
@@ -56,28 +56,23 @@ export default defineComponent({
     UserModal,
   },
   setup() {
-    const columns: ColumnProps<User>[] = [
+    const columns: ColumnProps[] = [
       {
         title: 'Username',
         dataIndex: 'username',
-        key: 'username',
       },
       {
         title: 'NickName',
         dataIndex: 'nickname',
-        key: 'nickname',
       },
-      {
-        title: 'Roles',
-        dataIndex: 'roles',
-        key: 'roles',
-        slots: { customRender: 'roles' },
-      },
-      {
-        title: 'Action',
-        key: 'action',
-        slots: { customRender: 'action' },
-      },
+      // {
+      //   title: 'Roles',
+      //   dataIndex: 'roles',
+      // },
+      // {
+      //   title: 'Action',
+      //   key: 'action',
+      // },
     ];
 
     const searchModelRef = reactive<Props>({
