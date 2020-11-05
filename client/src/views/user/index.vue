@@ -26,7 +26,7 @@
       :pagination="paginationProps"
       bordered
     >
-      <!-- <template v-slot:roles="{ text: roles }">
+      <template v-slot:roles="{ text: roles }">
         <a-tag v-for="role in roles" :key="role.id" color="blue">
           {{ role.roleName }}
         </a-tag>
@@ -35,15 +35,15 @@
         <span>
           <a>Delete {{ record.username }}</a>
         </span>
-      </template> -->
+      </template>
     </a-table>
 
-    <UserModal ref="userModal" :op="op" />
+    <UserModal :op="op" :formData="formData" v-model:visible="visible" :title="title" />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs } from 'vue';
+import { defineComponent, nextTick, onMounted, reactive, ref, toRefs } from 'vue';
 import { getUserPage } from '@/api/user';
 import useTablePage from '@/composables/useTablePage';
 import { ColumnProps } from 'ant-design-vue/es/table/interface';
@@ -56,7 +56,7 @@ export default defineComponent({
     UserModal,
   },
   setup() {
-    const columns: ColumnProps[] = [
+    const columns: Array<ColumnProps & Props> = [
       {
         title: 'Username',
         dataIndex: 'username',
@@ -65,14 +65,16 @@ export default defineComponent({
         title: 'NickName',
         dataIndex: 'nickname',
       },
-      // {
-      //   title: 'Roles',
-      //   dataIndex: 'roles',
-      // },
-      // {
-      //   title: 'Action',
-      //   key: 'action',
-      // },
+      {
+        title: 'Roles',
+        dataIndex: 'roles',
+        slots: { customRender: 'roles' },
+      },
+      {
+        title: 'Action',
+        key: 'action',
+        slots: { customRender: 'action' },
+      },
     ];
 
     const searchModelRef = reactive<Props>({
@@ -97,15 +99,19 @@ export default defineComponent({
       visible: false,
       title: 'User',
       op: 'add',
+      formData: undefined,
     });
 
+    const userModal = ref(null);
     const onAddClick = () => {
       state.visible = true;
+      state.formData = undefined;
     };
     return {
       ...toRefs(state),
       onAddClick,
       list,
+      userModal,
       columns,
       loading,
       paginationProps,

@@ -21,6 +21,7 @@ axiosInstance.interceptors.request.use(config => {
   return Promise.reject(error);
 });
 
+// TODO handleError
 function handleError(status: number, errorMessage: unknown) {
   let errMessage = 'Ops,出错了！';
   if (typeof errorMessage === 'string') {

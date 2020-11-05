@@ -1,6 +1,8 @@
 package com.joey.admin.security.config;
 
 import com.joey.admin.security.filter.JwtAuthorizationTokenFilter;
+import com.joey.admin.security.handler.JwtAccessDeniedHandler;
+import com.joey.admin.security.handler.JwtAuthenticationEntryPoint;
 import com.joey.admin.security.service.impl.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -54,20 +56,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and()
-                // 禁用 CSRF
-                .csrf().disable()
-                .authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/auth/**", "/public/**").permitAll()
-                //  指定路径下的资源需要验证了的用户才能访问
-                .antMatchers(HttpMethod.GET,  "/api/users/**").permitAll()
-                .antMatchers(HttpMethod.DELETE).hasRole("ADMIN")
-                // 其他都验证 TODO
-                .anyRequest().authenticated()
-                .and()
-                // token filter
-                .addFilterBefore(new JwtAuthorizationTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-        // 异常处理
-//                .exceptionHandling().authenticationEntryPoint(new JwtAuthenticationEntryPoint())
-//                .accessDeniedHandler(new JwtAccessDeniedHandler());
+            // 禁用 CSRF
+            .csrf().disable()
+            .authorizeRequests()
+            .antMatchers(HttpMethod.POST, "/auth/**", "/public/**").permitAll()
+            //  指定路径下的资源需要验证了的用户才能访问
+            .antMatchers(HttpMethod.GET, "/api/users/**").permitAll()
+            .antMatchers(HttpMethod.DELETE).hasRole("ADMIN")
+            // 其他都验证 TODO
+            .anyRequest().authenticated()
+            .and()
+            // token filter
+            .addFilterBefore(new JwtAuthorizationTokenFilter(), UsernamePasswordAuthenticationFilter.class)
+            // 异常处理
+            .exceptionHandling().authenticationEntryPoint(new JwtAuthenticationEntryPoint())
+            .accessDeniedHandler(new JwtAccessDeniedHandler());
     }
 }

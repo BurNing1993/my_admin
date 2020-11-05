@@ -1,31 +1,60 @@
 <template>
-  <a-modal v-model:visible="visible" title="title" @ok="handleOk">
-    <p>Some contents...</p>
-    <p>Some contents...</p>
-    <p>Some contents...</p>
+  <a-modal v-bind="$attr" @ok="onSubmit">
+    <a-form :label-col="{ span: 4 }" :wrapper-col="{ span: 20 }">
+      <a-form-item label="username" v-bind="validateInfos.username">
+        <a-input
+          v-model:value.trim="modelRef.username"
+          allowClear
+          placeholder="username"
+        />
+      </a-form-item>
+      <a-form-item label="nickname" v-bind="validateInfos.nickname">
+        <a-input
+          v-model:value.trim="modelRef.nickname"
+          allowClear
+          placeholder="nickname"
+        />
+      </a-form-item>
+      <a-form-item label="email" v-bind="validateInfos.email">
+        <a-input
+          v-model:value.trim="modelRef.email"
+          allowClear
+          placeholder="email"
+        />
+      </a-form-item>
+      <a-form-item label="cellphone" v-bind="validateInfos.cellphone">
+        <a-input
+          v-model:value.trim="modelRef.cellphone"
+          allowClear
+          placeholder="cellphone"
+        />
+      </a-form-item>
+      <a-form-item label="roleIds" v-bind="validateInfos.roleIds">
+        <a-input
+          v-model:value.trim="modelRef.roleIds"
+          allowClear
+          placeholder="roleIds"
+        />
+      </a-form-item>
+    </a-form>
   </a-modal>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, toRef, toRefs } from 'vue';
+import { defineComponent, PropType, reactive, ref, toRaw, watch } from 'vue';
+import { useForm } from '@ant-design-vue/use';
+import { message } from 'ant-design-vue';
 
-class User {
+import { addUser } from '@/api/user';
+
+interface User {
   id?: string;
   username: string;
   nickname: string;
   email: string;
   cellphone: string;
   roleIds: number[];
-  constructor() {
-    this.username = '';
-    this.nickname = '';
-    this.email = '';
-    this.cellphone = '';
-    this.roleIds = [];
-  }
 }
-
-const initForm = () => new User();
 
 export default defineComponent({
   name: 'UserModal',
@@ -34,23 +63,67 @@ export default defineComponent({
       type: String,
       default: 'detail',
     },
+    formData: {
+      type: Object as PropType<User>,
+      // type: Object,
+      default: undefined,
+    },
   },
   setup(props) {
-    console.log(props);
-    const visible = ref(false);
+    let modelRef = reactive<User>({
+      username: '',
+      nickname: '',
+      email: '',
+      cellphone: '',
+      roleIds: [],
+    });
 
-    const show = () => {
-      console.log('UserModal show');
-      visible.value = true;
+    const rulesRef = reactive({
+      username: [
+        {
+          required: true,
+          message: 'Please input username',
+        },
+      ],
+    });
+    const { resetFields, validate, validateInfos } = useForm(
+      modelRef,
+      rulesRef,
+    );
+
+    watch(
+      () => props.formData,
+      (formData) => {
+        if (formData) {
+          modelRef = reactive({ ...formData });
+        } else {
+          resetFields();
+        }
+      },
+    );
+
+    const loading = ref(false);
+
+    const onSubmit = async (e: MouseEvent) => {
+      try {
+        e.preventDefault();
+        loading.value = true;
+        await validate();
+        await addUser(toRaw(modelRef));
+        message.success('添加成功!');
+      } catch (error) {
+        console.log('error', error);
+      } finally {
+        loading.value = false;
+      }
     };
 
-    const handleOk = () => {
-      console.log('handleOk');
-    };
     return {
-      show,
-      visible,
-      handleOk,
+      validateInfos,
+      resetFields,
+      modelRef,
+      onSubmit,
+      loading,
     };
   },
 });

@@ -2,7 +2,7 @@ const TOKEN_KEY = '_token';
 const TOKEN_PREFIX = 'Bearer ';
 
 export function getToken() {
-  return localStorage[TOKEN_KEY];
+  return localStorage[TOKEN_KEY] || "";
 }
 
 export function setToken(token: string) {

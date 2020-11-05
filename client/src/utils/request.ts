@@ -25,12 +25,20 @@ axiosInstance.interceptors.request.use(config => {
   return Promise.reject(error);
 });
 
-function handleError(status: number, errorMessage: unknown) {
+function handleError(status: number, errorInfo: unknown) {
   let errMessage = 'Ops,出错了！';
-  if (typeof errorMessage === 'string') {
-    errMessage = errorMessage;
+  console.log(errorInfo);
+  if (typeof errorInfo === 'string') {
+    errMessage = errorInfo;
   }
   switch (status) {
+    // 400 Bad Request
+    case 400:
+      if (errorInfo && typeof errorInfo === 'object') {
+        errMessage = Object.values(errorInfo).join();
+      }
+      message.error(errMessage);
+      break;
     // 401 Unauthorized
     case 401:
       message.error(errMessage);

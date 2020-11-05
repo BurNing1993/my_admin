@@ -56,6 +56,7 @@ public class UserController {
 
     @PostMapping("/user")
     public ResponseEntity<?> addUser(@Valid @RequestBody UserRequest userRequest) {
+        log.info("UserRequest->",userRequest.toString());
         UserDO userDO = new UserDO();
         BeanUtils.copyProperties(userRequest, userDO);
         userDO.setEnabled(true);

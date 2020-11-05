@@ -2,7 +2,7 @@
   <a-row type="flex" justify="center" align="middle" id="login-container">
     <a-col :xs="24" :sm="14" :md="12" :lg="8" :xl="6">
       <a-card title="Login">
-        <a-form>
+        <a-form  :wrapper-col="{span: 24}">
           <a-form-item v-bind="validateInfos.username">
             <a-input v-model:value="loginRef.username" placeholder="Username">
               <template v-slot:prefix>

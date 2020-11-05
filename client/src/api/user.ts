@@ -1,12 +1,9 @@
 import { AxiosPromise } from 'axios';
 import request from '../utils/request';
-import { BasePageParams, PageResponse } from '../utils/types';
+import { BasePageParams, PageResponse, Props } from '../utils/types';
 
-export interface UserPageParams {
-  [key: string]: any;
-}
 export interface User {
-  id: number;
+  id?: number;
   username: string;
   nickname: string;
   enabled: boolean;
@@ -15,10 +12,18 @@ export interface User {
   roles: any[]; // TODO role
 }
 
-export function getUserPage(params: UserPageParams & BasePageParams): AxiosPromise<PageResponse<User>> {
+export function getUserPage(params: Props & BasePageParams): AxiosPromise<PageResponse<User>> {
   return request({
     url: '/user/page',
     method: 'GET',
     params,
+  });
+}
+
+export function addUser(data: object) {
+  return request({
+    url: '/user',
+    method: 'POST',
+    data,
   });
 }
