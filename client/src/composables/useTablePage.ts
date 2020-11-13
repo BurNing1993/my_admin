@@ -3,8 +3,7 @@ import { useForm } from '@ant-design-vue/use';
 
 import { BasePageParams, Result, Props } from '../utils/types';
 
-// TODO 泛型
-export default function usePage(getData: (pageParams: BasePageParams) => Promise<Result<any>>, modelRef: Props) {
+export default function usePage<T>(getData: (pageParams: BasePageParams) => Promise<Result<T>>, modelRef: Props) {
   const loading = ref(false);
 
   const pageParams: BasePageParams = reactive({
@@ -12,7 +11,7 @@ export default function usePage(getData: (pageParams: BasePageParams) => Promise
     size: 10,
   });
 
-  const result: Result<any> = reactive({
+  const result: Result<T> = reactive({
     list: [],
     total: 0,
   });

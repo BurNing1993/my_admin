@@ -1,8 +1,9 @@
+import { ValidationRule } from 'ant-design-vue/lib/form/Form';
 
 // 表单验证type
-// export interface FormRules {
-//   [key: string]: ValidationRule[];
-// }
+export interface FormRules {
+  [key: string]: ValidationRule[];
+}
 
 // 分页基本参数
 export interface BasePageParams {
